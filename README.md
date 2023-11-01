@@ -1,0 +1,9 @@
+# Checklist
+- ~~FCFS~~
+- ~~SJF~~
+- ~~SRTF~~
+- ~~ROUND ROBIN~~
+- ~~PRIORITY NONPREEMPTIVE~~
+- ~~PRIORITY PREEMPTIVE~~
+- MLQ
+- MLFQ
