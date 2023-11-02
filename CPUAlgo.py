@@ -18,13 +18,28 @@ class CPUAlgo(ABC):
         self._arrived_procs: Deque[Process] = deque()
         self.__time: int = 0
         self.__has_executed: bool = False
+        self.__is_executing: bool = False
         for process in processes:
             self.insert_process(process)
     
     def __check_was_executed(func):
-        def wrapper(self: CPUAlgo, *args, **kwargs):
+        def wrapper(self, *args, **kwargs):
             if not self.__has_executed:
                 raise RuntimeError(f"{func.__name__} cannot be called before before or during execution")
+            return func(self, *args, **kwargs)
+        return wrapper
+        
+    def __check_is_executing(func):
+        def wrapper(self, *args, **kwargs):
+            if not self.__is_executing:
+                raise RuntimeError(f"{func.__name__} should be only called within the _update() virtual method")
+            return func(self, *args, **kwargs)
+        return wrapper
+
+    def __check_isnt_executing(func):
+        def wrapper(self, *args, **kwargs):
+            if self.__is_executing:
+                raise RuntimeError(f"{func.__name__} should not be called within the _update() virtual method")
             return func(self, *args, **kwargs)
         return wrapper
 
@@ -42,23 +57,27 @@ class CPUAlgo(ABC):
     def processes_list(self) -> List[Process]:
         return self.__init_procs
     
+    @__check_isnt_executing
     def insert_process(self, process: Process) -> None:
         process.process_id = self.__proc_id_ctr
         bisect.insort(self.__init_procs, process, key=lambda x: x.arrival)
         self.__proc_id_ctr += 1
     
+    @__check_isnt_executing
     def rewind(self) -> None:
         self._arrived_procs.clear()
         self.__time = 0
         for process in self.__init_procs:
             process.rewind()
     
+    @__check_is_executing
     def __queue_arrived_processes(self) -> None:
         next_arrival = self.time_to_next_arrival()
         while next_arrival is not None and next_arrival <= 0:
             self._arrived_procs.append(self.__incoming_procs.popleft())
             next_arrival = self.time_to_next_arrival()
     
+    @__check_is_executing
     def skip_to_next_arrival(self) -> None:
         next_arrival_time = self.time_to_next_arrival()
         if not self._arrived_procs and self.__incoming_procs and next_arrival_time is not None and next_arrival_time >= 0:
@@ -67,11 +86,13 @@ class CPUAlgo(ABC):
             while self.__incoming_procs and self.__incoming_procs[0].arrival == self.__time:
                 self._arrived_procs.append(self.__incoming_procs.popleft())
     
+    @__check_is_executing
     def time_to_next_arrival(self) -> Optional[int]:
         if not self.__incoming_procs:
             return None
         return self.__incoming_procs[0].arrival - self.__time
     
+    @__check_is_executing
     def process(self, _process_time: int = -1, process: Optional[Process] = None) -> bool:
         if _process_time == -1 and process is None:
             raise CPUAlgo.PROCESS_TIME_AND_PROCESS_NONE_ERROR
@@ -99,10 +120,13 @@ class CPUAlgo(ABC):
     def execute(self) -> None:
         self._ready()
         while self.__unfinished_procs:
+            self.__is_executing = True
             self.__queue_arrived_processes()
             self._update()
+            self.__is_executing = False
         self.__has_executed = True
 
     @abstractmethod
+    @__check_is_executing
     def _update(self) -> None:
         pass
