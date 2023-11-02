@@ -81,7 +81,6 @@ class CPUAlgo(ABC):
         print(process.name if process else 'BLANK', self.__time)
         return is_finished
     
-    @abstractmethod
     def _ready(self) -> None:
         self.rewind()
         self.__incoming_procs = deque(self.__init_procs)

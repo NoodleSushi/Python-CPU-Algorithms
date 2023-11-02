@@ -11,9 +11,6 @@ from CPUAlgo import CPUAlgo
 class FCFS(CPUAlgo):
     def __init__(self, processes: Iterable[Process] = []) -> None:
         super().__init__(processes)
-    
-    def _ready(self) -> None:
-        super()._ready()
 
     def _update(self):
         self.skip_to_next_arrival()
