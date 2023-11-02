@@ -17,14 +17,24 @@ class CPUAlgo(ABC):
         self.__incoming_procs: Deque[Process] = deque()
         self._arrived_procs: Deque[Process] = deque()
         self.__time: int = 0
+        self.__has_executed: bool = False
         for process in processes:
             self.insert_process(process)
     
+    def __check_was_executed(func):
+        def wrapper(self: CPUAlgo, *args, **kwargs):
+            if not self.__has_executed:
+                raise RuntimeError(f"{func.__name__} cannot be called before before or during execution")
+            return func(self, *args, **kwargs)
+        return wrapper
+
     @property
+    @__check_was_executed
     def avg_turnaround_time(self) -> float:
         return sum(process.turnaround_time for process in self.__init_procs) / len(self.__init_procs)
     
     @property
+    @__check_was_executed
     def avg_waiting_time(self) -> float:
         return sum(process.waiting_time for process in self.__init_procs) / len(self.__init_procs)
     
@@ -84,12 +94,14 @@ class CPUAlgo(ABC):
         self.rewind()
         self.__incoming_procs = deque(self.__init_procs)
         self.__unfinished_procs = set(self.__init_procs)
+        self.__has_executed = False
     
     def execute(self) -> None:
         self._ready()
         while self.__unfinished_procs:
             self.__queue_arrived_processes()
             self._update()
+        self.__has_executed = True
 
     @abstractmethod
     def _update(self) -> None:
