@@ -78,7 +78,6 @@ class CPUAlgo(ABC):
                 self.__unfinished_procs.remove(process)
         
         self.__time += process_time
-        print(process.name if process else 'BLANK', self.__time)
         return is_finished
     
     def _ready(self) -> None:
