@@ -42,16 +42,26 @@ class CPUAlgo(ABC):
                 raise RuntimeError(f"{func.__name__} should not be called within the _update() virtual method")
             return func(self, *args, **kwargs)
         return wrapper
+    
+    @property
+    @__check_was_executed
+    def total_turnaround_time(self) -> int:
+        return sum(process.turnaround_time for process in self.__init_procs)
 
     @property
     @__check_was_executed
     def avg_turnaround_time(self) -> float:
-        return sum(process.turnaround_time for process in self.__init_procs) / len(self.__init_procs)
+        return self.total_turnaround_time / len(self.__init_procs)
     
     @property
     @__check_was_executed
+    def total_waiting_time(self) -> int:
+        return sum(process.waiting_time for process in self.__init_procs)
+
+    @property
+    @__check_was_executed
     def avg_waiting_time(self) -> float:
-        return sum(process.waiting_time for process in self.__init_procs) / len(self.__init_procs)
+        return self.total_waiting_time / len(self.__init_procs)
     
     @property
     def processes_list(self) -> List[Process]:
