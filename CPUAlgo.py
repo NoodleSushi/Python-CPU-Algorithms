@@ -4,6 +4,7 @@ import bisect
 from collections import deque
 
 from Process import Process
+from GanttChart import GanttChart
 
 
 class CPUAlgo(ABC):
@@ -16,6 +17,7 @@ class CPUAlgo(ABC):
         self.__unfinished_procs: Set[Process] = set()
         self.__incoming_procs: Deque[Process] = deque()
         self._arrived_procs: Deque[Process] = deque()
+        self.__gantt_chart: GanttChart = GanttChart()
         self.__time: int = 0
         self.__has_executed: bool = False
         self.__is_executing: bool = False
@@ -62,6 +64,11 @@ class CPUAlgo(ABC):
     @__check_was_executed
     def avg_waiting_time(self) -> float:
         return self.total_waiting_time / len(self.__init_procs)
+    
+    @property
+    @__check_was_executed
+    def gantt_chart(self) -> GanttChart:
+        return self.__gantt_chart
     
     @property
     def processes_list(self) -> List[Process]:
@@ -117,7 +124,7 @@ class CPUAlgo(ABC):
             is_finished = process.process(self.__time, process_time)
             if is_finished:
                 self.__unfinished_procs.remove(process)
-        
+        self.__gantt_chart.add_task(process, self.__time, self.__time + process_time)
         self.__time += process_time
         return is_finished
     
