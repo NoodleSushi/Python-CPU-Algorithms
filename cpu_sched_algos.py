@@ -2,8 +2,6 @@ from typing import Deque, Iterable, List, Optional
 import bisect
 from collections import deque
 
-from tabulate import tabulate
-
 from process_timeline import Process
 from cpu_sched_base import CPUSchedBase
 
