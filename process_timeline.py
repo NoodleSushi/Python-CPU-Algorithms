@@ -2,17 +2,17 @@ from typing import List, Optional
 from dataclasses import dataclass
 from collections.abc import Sequence
 
-from Process import Process
+from process import Process
 
 @dataclass
-class GanttTask:
+class ProcessTask:
     process: Optional[Process]
     start: int
     end: int
 
-class GanttChart(Sequence):
+class ProcessTimeline(Sequence):
     def __init__(self) -> None:
-        self.__tasks: List[GanttTask] = []
+        self.__tasks: List[ProcessTask] = []
         super().__init__()
 
     def add_task(self, process: Optional[Process], start: int, end: int) -> None:
@@ -20,12 +20,12 @@ class GanttChart(Sequence):
             raise ValueError("Invalid start time")
         elif (start >= end):
             raise ValueError("Invalid end time")
-        self.__tasks.append(GanttTask(process, start, end))
+        self.__tasks.append(ProcessTask(process, start, end))
 
     def clear(self) -> None:
         self.__tasks.clear()
 
-    def __getitem__(self, index: int) -> GanttTask:
+    def __getitem__(self, index: int) -> ProcessTask:
         return self.__tasks[index]
 
     def __len__(self) -> int:

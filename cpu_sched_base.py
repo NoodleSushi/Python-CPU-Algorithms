@@ -3,11 +3,11 @@ from typing import Deque, Iterable, List, Optional, Set
 import bisect
 from collections import deque
 
-from Process import Process
-from GanttChart import GanttChart
+from process import Process
+from process_timeline import ProcessTimeline
 
 
-class CPUAlgo(ABC):
+class CPUSchedBase(ABC):
     NEGATIVE_PROCESS_TIME_ERROR = ValueError("process_time cannot be negative")
     PROCESS_TIME_AND_PROCESS_NONE_ERROR = ValueError("process_time and process cannot both be None")
     
@@ -17,7 +17,7 @@ class CPUAlgo(ABC):
         self.__unfinished_procs: Set[Process] = set()
         self.__incoming_procs: Deque[Process] = deque()
         self._arrived_procs: Deque[Process] = deque()
-        self.__gantt_chart: GanttChart = GanttChart()
+        self.__proc_timeline: ProcessTimeline = ProcessTimeline()
         self.__time: int = 0
         self.__has_executed: bool = False
         self.__is_executing: bool = False
@@ -44,31 +44,21 @@ class CPUAlgo(ABC):
                 raise RuntimeError(f"{func.__name__} should be only called outside the _update() virtual method")
             return func(self, *args, **kwargs)
         return wrapper
-    
-    @property
-    @__was_executed
-    def total_turnaround_time(self) -> int:
-        return sum(process.turnaround_time for process in self.__init_procs)
 
     @property
     @__was_executed
     def avg_turnaround_time(self) -> float:
-        return self.total_turnaround_time / len(self.__init_procs)
-    
-    @property
-    @__was_executed
-    def total_waiting_time(self) -> int:
-        return sum(process.waiting_time for process in self.__init_procs)
+        return sum(process.turnaround_time for process in self.__init_procs) / len(self.__init_procs)
 
     @property
     @__was_executed
     def avg_waiting_time(self) -> float:
-        return self.total_waiting_time / len(self.__init_procs)
+        return sum(process.waiting_time for process in self.__init_procs) / len(self.__init_procs)
     
     @property
     @__was_executed
-    def gantt_chart(self) -> GanttChart:
-        return self.__gantt_chart
+    def proc_timeline(self) -> ProcessTimeline:
+        return self.__proc_timeline
     
     @property
     def processes_list(self) -> List[Process]:
@@ -85,7 +75,7 @@ class CPUAlgo(ABC):
         self.__unfinished_procs.clear()
         self.__incoming_procs.clear()
         self._arrived_procs.clear()
-        self.__gantt_chart.clear()
+        self.__proc_timeline.clear()
         self.__time = 0
         for process in self.__init_procs:
             process.rewind()
@@ -115,9 +105,9 @@ class CPUAlgo(ABC):
     @__is_inside_update
     def process(self, _process_time: int = -1, process: Optional[Process] = None) -> bool:
         if _process_time == -1 and process is None:
-            raise CPUAlgo.PROCESS_TIME_AND_PROCESS_NONE_ERROR
+            raise CPUSchedBase.PROCESS_TIME_AND_PROCESS_NONE_ERROR
         if _process_time < 0 and _process_time != -1:
-            raise CPUAlgo.NEGATIVE_PROCESS_TIME_ERROR
+            raise CPUSchedBase.NEGATIVE_PROCESS_TIME_ERROR
         is_finished = False
         process_time = _process_time
         if process is not None:
@@ -127,7 +117,7 @@ class CPUAlgo(ABC):
             is_finished = process.process(self.__time, process_time)
             if is_finished:
                 self.__unfinished_procs.remove(process)
-        self.__gantt_chart.add_task(process, self.__time, self.__time + process_time)
+        self.__proc_timeline.add_task(process, self.__time, self.__time + process_time)
         self.__time += process_time
         return is_finished
     
