@@ -1,4 +1,4 @@
-import tabulate
+from tabulate import tabulate
 from cpu_sched_base import CPUSchedBase
 from cpu_sched_algos import PPSched
 from process import Process
@@ -38,3 +38,8 @@ def print_cpu_sched_table(algo: CPUSchedBase):
 
 cpualgo.execute()
 print_cpu_sched_table(cpualgo)
+print()
+print('Average Turnaround Time:', cpualgo.avg_turnaround_time)
+print('Average Waiting Time:', cpualgo.avg_waiting_time)
+print()
+print(cpualgo.proc_timeline)
