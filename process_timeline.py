@@ -37,8 +37,8 @@ class ProcessTimeline(Sequence):
     def __str__(self) -> str:
         out = ""
         max_name_length = min(4, max(len(task.process.name) for task in self.__tasks) + 2)
-        border_top = "┌" + "─" * max_name_length + ("┬" + "─" * max_name_length) * (len(self.__tasks) - 1) + "┐"
-        border_bot = "└" + "─" * max_name_length + ("┴" + "─" * max_name_length) * (len(self.__tasks) - 1) + "┘"
+        border_top = "╭" + "─" * max_name_length + ("┬" + "─" * max_name_length) * (len(self.__tasks) - 1) + "╮"
+        border_bot = "╰" + "─" * max_name_length + ("┴" + "─" * max_name_length) * (len(self.__tasks) - 1) + "╯"
         out += border_top + "\n"
         for task in self.__tasks:
             out += f"│{task.process.name.center(max_name_length)}"
