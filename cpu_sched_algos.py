@@ -9,6 +9,10 @@ from cpu_sched_base import CPUSchedBase
 class FCFSSched(CPUSchedBase):
     def __init__(self, processes: Iterable[Process] = []) -> None:
         super().__init__(processes)
+    
+    @property
+    def name(self) -> str:
+        return "First Come First Serve"
 
     def _update(self):
         self.skip_to_next_arrival()
@@ -20,6 +24,10 @@ class SJFSched(CPUSchedBase):
     def __init__(self, processes: Iterable[Process] = []) -> None:
         super().__init__(processes)
         self.__procs_list: List[Process] = []
+
+    @property
+    def name(self) -> str:
+        return "Shortest Job First"
     
     def _ready(self) -> None:
         super()._ready()
@@ -37,6 +45,10 @@ class SRTFSched(CPUSchedBase):
     def __init__(self, processes: Iterable[Process] = []) -> None:
         super().__init__(processes)
         self.__procs_list: List[Process] = []
+    
+    @property
+    def name(self) -> str:
+        return "Shortest Remaining Time First"
     
     def _ready(self) -> None:
         super()._ready()
@@ -59,6 +71,10 @@ class RRSched(CPUSchedBase):
         self.time_quantum = time_quantum
         self.__procs_queue: Deque[Process] = deque()
         self.__process: Optional[Process] = None
+    
+    @property
+    def name(self) -> str:
+        return "Round Robin"
     
     def _ready(self) -> None:
         super()._ready()
@@ -84,6 +100,10 @@ class PNPSched(CPUSchedBase):
         super().__init__(processes)
         self.__procs_list: List[Process] = []
     
+    @property
+    def name(self) -> str:
+        return "Priority Non-Preemptive"
+    
     def _ready(self) -> None:
         super()._ready()
         self.__procs_list = []
@@ -99,6 +119,10 @@ class PPSched(CPUSchedBase):
     def __init__(self, processes: Iterable[Process] = []) -> None:
         super().__init__(processes)
         self.__procs_list: List[Process] = []
+    
+    @property
+    def name(self) -> str:
+        return "Priority Based Scheduling"
     
     def _ready(self) -> None:
         super()._ready()

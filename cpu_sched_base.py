@@ -120,6 +120,11 @@ class CPUSchedBase(ABC):
         self.__proc_timeline.add_task(process, self.__time, self.__time + process_time)
         self.__time += process_time
         return is_finished
+
+    @property
+    @abstractmethod
+    def name(self) -> str:
+        pass
     
     def _ready(self) -> None:
         self.rewind()
