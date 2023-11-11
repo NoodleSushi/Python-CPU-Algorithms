@@ -121,6 +121,7 @@ class CPUSchedBase(ABC):
         self.__time += process_time
         return is_finished
 
+    @classmethod
     @property
     @abstractmethod
     def name(self) -> str:

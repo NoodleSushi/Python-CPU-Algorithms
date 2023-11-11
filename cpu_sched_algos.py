@@ -10,6 +10,7 @@ class FCFSSched(CPUSchedBase):
     def __init__(self, processes: Iterable[Process] = []) -> None:
         super().__init__(processes)
     
+    @classmethod
     @property
     def name(self) -> str:
         return "First Come First Serve"
@@ -25,6 +26,7 @@ class SJFSched(CPUSchedBase):
         super().__init__(processes)
         self.__procs_list: List[Process] = []
 
+    @classmethod
     @property
     def name(self) -> str:
         return "Shortest Job First"
@@ -46,6 +48,7 @@ class SRTFSched(CPUSchedBase):
         super().__init__(processes)
         self.__procs_list: List[Process] = []
     
+    @classmethod
     @property
     def name(self) -> str:
         return "Shortest Remaining Time First"
@@ -72,6 +75,7 @@ class RRSched(CPUSchedBase):
         self.__procs_queue: Deque[Process] = deque()
         self.__process: Optional[Process] = None
     
+    @classmethod
     @property
     def name(self) -> str:
         return "Round Robin"
@@ -100,6 +104,7 @@ class PNPSched(CPUSchedBase):
         super().__init__(processes)
         self.__procs_list: List[Process] = []
     
+    @classmethod
     @property
     def name(self) -> str:
         return "Priority Non-Preemptive"
@@ -120,6 +125,7 @@ class PPSched(CPUSchedBase):
         super().__init__(processes)
         self.__procs_list: List[Process] = []
     
+    @classmethod
     @property
     def name(self) -> str:
         return "Priority Based Scheduling"
