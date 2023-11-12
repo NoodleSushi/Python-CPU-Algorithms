@@ -21,3 +21,7 @@ Alternatively, you can run the app manually:
 2. Activate the virtual environment by running the command `.venv\Scripts\activate`.
 3. Run the main.py file by running the command `python main.py`.
 4. Include the `-h` flag to see help for passing arguments.
+
+## Running CPU Algorithm Samples
+
+To run samples of each CPU algorithm, navigate to the `samples` folder and execute the batch file corresponding to the desired algorithm abbreviation. For example, to run the First-Come, First-Served (FCFS) algorithm, run the `FCFS.bat` file.
