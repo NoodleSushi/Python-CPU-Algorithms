@@ -102,7 +102,7 @@ def gen_on_condition(bool: bool, generator: Callable[[], T], default) -> T:
 
 time_quantum = gen_on_condition(
     SelectedAlgo == algos.RRSched, 
-    lambda: get_num_input('quantum', 'Time Quantum', lambda x: (isinstance(x, int) or re.match(r'^\d+$', x)) and int(x) >= 0), 
+    lambda: get_num_input('quantum', 'Time Quantum', lambda x: (isinstance(x, int) or bool(re.match(r'^\d+$', x))) and int(x) >= 0),
     0
 )
 arrival_times = get_multinum_input('arrival', 'Arrival Times (space-separated)', multinum_validator(True))
