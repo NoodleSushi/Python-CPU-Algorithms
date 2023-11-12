@@ -4,6 +4,8 @@ import re
 import argparse
 from rich.console import Console
 from rich.table import Table
+from rich.highlighter import ReprHighlighter
+from rich.text import Text
 from rich import box
 
 from cpu_sched_base import CPUSchedBase
@@ -167,5 +169,8 @@ console.print(f"CPU Utilization: {round(cpualgo.cpu_utilization*100*1000)/1000:.
 console.print(f"Average Turnaround Time: {round(cpualgo.avg_turnaround_time*1000)/1000:.2f}")
 console.print(f"Average Waiting Time: {round(cpualgo.avg_waiting_time*1000)/1000:.2f}")
 console.print()
-console.print(cpualgo.proc_timeline)
+timeline_display = Text(str(cpualgo.proc_timeline))
+timeline_display.highlight_regex(r"\d+", "yellow")
+timeline_display.highlight_regex(r"P\d+", "red")
+console.print(timeline_display)
 questionary.press_any_key_to_continue().ask()
