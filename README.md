@@ -7,3 +7,17 @@
 - ~~PRIORITY PREEMPTIVE~~
 - MLQ
 - MLFQ
+
+# Instructions
+1. Ensure that Python 3.11.x is installed and that the python system variable is directed to python.
+2. Ensure that you are connected to the internet to install the necessary libraries.
+3. Run install.bat to initialize the virtual environment and install the necessary libraries.
+
+## Ways to run the cmd app
+1. Run execute.bat to execute the cmd app.
+
+Alternatively, you can run the app manually:
+1. Open a command prompt in the same directory as the main.py file.
+2. Activate the virtual environment by running the activate.bat script. This can be done by running the command `call .\activate.bat`.
+3. Run the main.py file by running the command `python main.py`.
+4. Include the `-h` flag to see help for passing arguments.
