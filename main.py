@@ -142,7 +142,7 @@ def print_cpu_sched_table(console: Console, algo: CPUSchedBase):
     if isinstance(cpualgo, (algos.PNPSched, algos.PPSched)):
         headers.insert(3, "Pri")
     for header in headers:
-        table.add_column(header)
+        table.add_column(header, justify="center")
     for process in sorted(algo.processes_list, key=lambda x: x.process_id):
         row = [
             process.name, 
