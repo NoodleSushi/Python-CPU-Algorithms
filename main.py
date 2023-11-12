@@ -131,16 +131,16 @@ def print_cpu_sched_table(console: Console, algo: CPUSchedBase):
         box=box.ROUNDED,
         caption=f"Time Quantum: {cpualgo.time_quantum}" if isinstance(cpualgo, algos.RRSched) else None
     )
-    table.add_column("Name", justify="center", style="red")
+    table.add_column("Process ID", justify="center", style="red")
     headers = [
-        "AT",
-        "BT",
-        "ET",
-        "TaT",
-        "WT",
+        "Arrival Time",
+        "Burst Time",
+        "Ending Time",
+        "Turnaround Time",
+        "Waiting Time",
     ]
     if isinstance(cpualgo, (algos.PNPSched, algos.PPSched)):
-        headers.insert(3, "Pri")
+        headers.insert(0, "Priority")
     for header in headers:
         table.add_column(header, justify="center")
     for process in sorted(algo.processes_list, key=lambda x: x.process_id):
@@ -153,7 +153,7 @@ def print_cpu_sched_table(console: Console, algo: CPUSchedBase):
             str(process.waiting_time)
         ]
         if isinstance(cpualgo, (algos.PNPSched, algos.PPSched)):
-            row.insert(3, str(process.priority))
+            row.insert(1, str(process.priority))
         table.add_row(*row)
     console.print(table)
 
