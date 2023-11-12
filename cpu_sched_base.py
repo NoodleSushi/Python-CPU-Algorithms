@@ -64,6 +64,11 @@ class CPUSchedBase(ABC):
     def processes_list(self) -> List[Process]:
         return self.__init_procs
     
+    @property
+    @__was_executed
+    def cpu_utilization(self) -> float:
+        return sum(process.burst for process in self.__init_procs)/self.__time
+    
     @__is_outside_update
     def insert_process(self, process: Process) -> None:
         process.process_id = self.__proc_id_ctr
