@@ -36,7 +36,8 @@ class SJFSched(CPUSchedBase):
         self.__procs_list = []
 
     def _update(self):
-        self.skip_to_next_arrival()
+        if not self.__procs_list:
+            self.skip_to_next_arrival()
         while self._arrived_procs:
             bisect.insort(self.__procs_list, self._arrived_procs.popleft(), key=lambda x: x.burst)
         if self.__procs_list:
@@ -114,7 +115,8 @@ class PNPSched(CPUSchedBase):
         self.__procs_list = []
 
     def _update(self):
-        self.skip_to_next_arrival()
+        if not self.__procs_list:
+            self.skip_to_next_arrival()
         while self._arrived_procs:
             bisect.insort(self.__procs_list, self._arrived_procs.popleft(), key=lambda x: x.priority)
         if self.__procs_list:
