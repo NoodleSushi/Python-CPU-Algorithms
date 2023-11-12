@@ -133,7 +133,7 @@ def print_cpu_sched_table(console: Console, algo: CPUSchedBase):
         box=box.ROUNDED,
         caption=f"Time Quantum: {cpualgo.time_quantum}" if isinstance(cpualgo, algos.RRSched) else None
     )
-    table.add_column("Process ID", justify="center", style="red")
+    table.add_column("Process ID", justify="center", style="bright_red")
     headers = [
         "Arrival Time",
         "Burst Time",
@@ -170,7 +170,7 @@ console.print(f"Average Turnaround Time: {round(cpualgo.avg_turnaround_time*1000
 console.print(f"Average Waiting Time: {round(cpualgo.avg_waiting_time*1000)/1000:.2f}")
 console.print()
 timeline_display = Text(str(cpualgo.proc_timeline))
-timeline_display.highlight_regex(r"\d+", "yellow")
-timeline_display.highlight_regex(r"P\d+", "red")
+timeline_display.highlight_regex(r"\d+", "bright_yellow")
+timeline_display.highlight_regex(r"P\d+", "bright_red")
 console.print(timeline_display)
 questionary.press_any_key_to_continue().ask()
