@@ -18,6 +18,6 @@
 
 Alternatively, you can run the app manually:
 1. Open a command prompt in the same directory as the main.py file.
-2. Activate the virtual environment by running the activate.bat script. This can be done by running the command `call .\activate.bat`.
+2. Activate the virtual environment by running the command `.venv\Scripts\activate`.
 3. Run the main.py file by running the command `python main.py`.
 4. Include the `-h` flag to see help for passing arguments.
