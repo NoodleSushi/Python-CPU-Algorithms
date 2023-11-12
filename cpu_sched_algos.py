@@ -87,7 +87,7 @@ class RRSched(CPUSchedBase):
         self.__process = None
     
     def _update(self):
-        if not self.__procs_queue or not self.__process:
+        if not self.__procs_queue and not self.__process:
             self.skip_to_next_arrival()
         while self._arrived_procs:
             self.__procs_queue.append(self._arrived_procs.popleft())
